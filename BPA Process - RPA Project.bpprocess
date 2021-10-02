@@ -1,0 +1,286 @@
+﻿<process name="RPA Project" version="1.0" bpversion="6.10.1.35171" narrative="Generates a pdf for payslips of multiple users at once and sends them to the employees using email. " byrefcollection="true" preferredid="bf8893d2-3682-4774-8f17-cabc4c0a7b54">
+  <view>
+    <camerax>-529</camerax>
+    <cameray>-1264</cameray>
+    <zoom version="2">1.25</zoom>
+  </view>
+  <preconditions />
+  <endpoint narrative="" />
+  <stage stageid="5830b04c-3190-422d-b641-189a44b88efd" name="Start" type="Start">
+    <display x="-705" y="-1425" />
+    <onsuccess>70f370b8-e9a4-405d-9533-63e66af037eb</onsuccess>
+  </stage>
+  <stage stageid="f7cb6d7f-7bc5-49dc-8ef7-d3ebcf66df4c" name="Stage1" type="ProcessInfo">
+    <display x="-885" y="-1440" w="150" h="90" />
+  </stage>
+  <stage stageid="70f370b8-e9a4-405d-9533-63e66af037eb" name="Create Instance" type="Action">
+    <loginhibit onsuccess="true" />
+    <display x="-705" y="-1380" />
+    <inputs>
+      <input type="flag" name="Enable Events" friendlyname="Enable Events" narrative="Flag to indicate that events should be enabled / disabled on the attached instance - defaulted to True" expr="" />
+    </inputs>
+    <outputs>
+      <output type="number" name="handle" friendlyname="handle" narrative="An integer which can be used to identify the created instance in subsequent actions" stage="handle" />
+    </outputs>
+    <onsuccess>5e67dc50-f6ed-4ae1-86bc-eaa76b5fa708</onsuccess>
+    <resource object="MS Excel VBO" action="Create Instance" />
+  </stage>
+  <stage stageid="1b6821d0-383b-4699-91bc-c32395e8f0a6" name="handle" type="Data">
+    <display x="-195" y="-1410" />
+    <datatype>number</datatype>
+    <initialvalue />
+    <private />
+    <alwaysinit />
+  </stage>
+  <stage stageid="5e67dc50-f6ed-4ae1-86bc-eaa76b5fa708" name="Open Workbook" type="Action">
+    <loginhibit onsuccess="true" />
+    <display x="-705" y="-1335" />
+    <inputs>
+      <input type="number" name="handle" friendlyname="handle" narrative="The integer handle identifying the instance on which the required workbook should be opened. The default of zero indicates the currently active instance." expr="[handle]" />
+      <input type="text" name="File name" friendlyname="File name" narrative="The path and name of the file which should be opened." expr="&quot;D:\RPA Project\Database.xlsm&quot;" />
+    </inputs>
+    <outputs>
+      <output type="text" name="Workbook Name" friendlyname="Workbook Name" narrative="The name used by Excel to identify the workbook - usually this is the file name (without the path)." stage="Workbook Name" />
+    </outputs>
+    <onsuccess>28ffdf1c-9af8-49a4-87dd-1ea6656c290b</onsuccess>
+    <resource object="MS Excel VBO" action="Open Workbook" />
+  </stage>
+  <stage stageid="28ffdf1c-9af8-49a4-87dd-1ea6656c290b" name="Get Data" type="Action">
+    <loginhibit onsuccess="true" />
+    <display x="-705" y="-1290" />
+    <inputs>
+      <input type="number" name="handle" friendlyname="handle" narrative="The integer handle identifying the instance on which the worksheet which should be retrieved resides. The default of zero indicates the currently active instance." expr="[handle]" />
+      <input type="text" name="Workbook Name" friendlyname="Workbook Name" narrative="The name of the workbook which contains the sheet required. The default empty text indicates the currently active workbook on the specified instance." expr="[Workbook Name]" />
+      <input type="text" name="Worksheet Name" friendlyname="Worksheet Name" narrative="The name of the worksheet within the specified workbook which should be written to a collection. The default empty text indicates the currently active worksheet within the specified workbook." expr="&quot;Salary Structure&quot;" />
+      <input type="text" name="StartCell" friendlyname="StartCell" narrative="The starting cell of the range of interest" expr="&quot;A3&quot;" />
+      <input type="flag" name="Use Header" friendlyname="Use Header" narrative="This flag states if the excel collection uses a header, or not." expr="" />
+    </inputs>
+    <outputs>
+      <output type="collection" name="Data" friendlyname="Data" narrative="The data output" stage="Data" />
+    </outputs>
+    <onsuccess>236167f7-d676-4f8f-b04e-733c943ecd99</onsuccess>
+    <resource object="MS Excel VBO" action="Get Worksheet as Collection Offset" />
+  </stage>
+  <stage stageid="94921d7c-8f68-4527-b0ca-b3bcf222480f" name="Data" type="Collection">
+    <display x="-120" y="-1410" />
+    <datatype>collection</datatype>
+    <private />
+    <alwaysinit />
+    <collectioninfo>
+      <field name="Emp Code" type="text" />
+      <field name="Name of employee" type="text" />
+      <field name="PAN" type="text" />
+      <field name="Designation" type="text" />
+      <field name="Monthly Salary (CTC) Ex Incentive" type="text" />
+      <field name="Basic (CTC)" type="text" />
+      <field name="House Rent Allowance (CTC)" type="text" />
+      <field name="Conveyance Allowance (CTC)" type="text" />
+      <field name="Medical Reimburse-ment (CTC)" type="text" />
+      <field name="LTA - Leave Travel Allowance (CTC)" type="text" />
+      <field name="Other Allowance (CTC)" type="text" />
+      <field name="Monthly Total as per CTC" type="text" />
+      <field name="Basic (Actual)" type="text" />
+      <field name="House Rent Allowance (Actual)" type="text" />
+      <field name="Conveyance Allowance (Actual)" type="text" />
+      <field name="Medical Reimburse-ment (Actual)" type="text" />
+      <field name="LTA - Leave Travel Allowance (Actual)" type="text" />
+      <field name="Other Allowance (Actual)" type="text" />
+      <field name="Monthly Total as per Actual" type="text" />
+      <field name="Incentive (Actual)" type="text" />
+      <field name="Monthly Including Incentive" type="text" />
+      <field name="TDS" type="text" />
+      <field name="Other Deductins" type="text" />
+      <field name="Total Deductions" type="text" />
+      <field name="Net Payment after deductions" type="text" />
+      <field name="Date of Joining" type="text" />
+      <field name="Date of Leaving" type="text" />
+      <field name="Actual No of W Days" type="text" />
+      <field name="No of W days in Month" type="text" />
+      <field name="Leaves Entitlement" type="text" />
+      <field name="Leaves Taken" type="text" />
+      <field name="Balance Leaves available" type="text" />
+      <field name="Email ID" type="text" />
+    </collectioninfo>
+    <initialvalue>
+      <row>
+        <field name="Emp Code" type="text" value="" />
+        <field name="Name of employee" type="text" value="" />
+        <field name="PAN" type="text" value="" />
+        <field name="Designation" type="text" value="" />
+        <field name="Monthly Salary (CTC) Ex Incentive" type="text" value="" />
+        <field name="Basic (CTC)" type="text" value="" />
+        <field name="House Rent Allowance (CTC)" type="text" value="" />
+        <field name="Conveyance Allowance (CTC)" type="text" value="" />
+        <field name="Medical Reimburse-ment (CTC)" type="text" value="" />
+        <field name="LTA - Leave Travel Allowance (CTC)" type="text" value="" />
+        <field name="Other Allowance (CTC)" type="text" value="" />
+        <field name="Monthly Total as per CTC" type="text" value="" />
+        <field name="Basic (Actual)" type="text" value="" />
+        <field name="House Rent Allowance (Actual)" type="text" value="" />
+        <field name="Conveyance Allowance (Actual)" type="text" value="" />
+        <field name="Medical Reimburse-ment (Actual)" type="text" value="" />
+        <field name="LTA - Leave Travel Allowance (Actual)" type="text" value="" />
+        <field name="Other Allowance (Actual)" type="text" value="" />
+        <field name="Monthly Total as per Actual" type="text" value="" />
+        <field name="Incentive (Actual)" type="text" value="" />
+        <field name="Monthly Including Incentive" type="text" value="" />
+        <field name="TDS" type="text" value="" />
+        <field name="Other Deductins" type="text" value="" />
+        <field name="Total Deductions" type="text" value="" />
+        <field name="Net Payment after deductions" type="text" value="" />
+        <field name="Date of Joining" type="text" value="" />
+        <field name="Date of Leaving" type="text" value="" />
+        <field name="Actual No of W Days" type="text" value="" />
+        <field name="No of W days in Month" type="text" value="" />
+        <field name="Leaves Entitlement" type="text" value="" />
+        <field name="Leaves Taken" type="text" value="" />
+        <field name="Balance Leaves available" type="text" value="" />
+        <field name="Email ID" type="text" value="" />
+      </row>
+    </initialvalue>
+  </stage>
+  <stage stageid="f3c41ee4-6e5a-4653-aaf3-1fbf9da72592" name="Workbook Name" type="Data">
+    <display x="-60" y="-1410" />
+    <datatype>text</datatype>
+    <initialvalue />
+    <private />
+    <alwaysinit />
+  </stage>
+  <stage stageid="02869c46-775c-4da7-bb2e-c345f88d2f2f" name="End1" type="End">
+    <loginhibit onsuccess="true" />
+    <display x="-330" y="-1245" />
+  </stage>
+  <stage stageid="236167f7-d676-4f8f-b04e-733c943ecd99" name="Activate Payslip" type="Action">
+    <loginhibit onsuccess="true" />
+    <display x="-705" y="-1245" />
+    <inputs>
+      <input type="number" name="handle" friendlyname="handle" narrative="The integer handle identifying the instance on which the worksheet which should be activated resides. The default of zero indicates the currently active instance." expr="[handle]" />
+      <input type="text" name="Workbook Name" friendlyname="Workbook Name" narrative="The name of the workbook in which the sheet exists - The default empty value indicates the currently active workbook on the specified instance." expr="[Workbook Name]" />
+      <input type="text" name="Worksheet Name" friendlyname="Worksheet Name" narrative="The name of the sheet which should be activated. The default empty text value indicates that the currently active sheet should be, er, activated, making this a no-op." expr="&quot;PaySlip&quot;" />
+      <input type="flag" name="Create If Missing?" friendlyname="Create If Missing?" narrative="True to create the sheet if it isn't present on the specified workbook; False to not do so." expr="False" />
+    </inputs>
+    <onsuccess>511f4d26-6158-41ce-81a8-4a58322c8486</onsuccess>
+    <resource object="MS Excel VBO" action="Activate Worksheet" />
+  </stage>
+  <stage stageid="511f4d26-6158-41ce-81a8-4a58322c8486" name="Add to Queue" type="Action">
+    <loginhibit onsuccess="true" />
+    <narrative>The Data collection contains the items to be added to the queue. The collection may contain single or multiple rows, with each representing an item to be added.
+
+If there is a failure during the process, the queue will be unchanged - i.e. no rows will be loaded even if the error occurred on the last one.
+
+If Defer Until is specified, the items will not be available to be worked until then. Otherwise, they are available immediately.
+
+If the queue has a key field defined, an item added has key data longer than the maximum permitted 255 characters, an error will occur</narrative>
+    <display x="-630" y="-1245" />
+    <inputs>
+      <input type="text" name="Queue Name" friendlyname="Queue Name" narrative="The name of the queue to add items to" expr="&quot;WQ1&quot;" />
+      <input type="collection" name="Data" friendlyname="Data" narrative="A collection containing the data, one row for each item to be added" expr="[Data]" />
+      <input type="datetime" name="Defer Until" friendlyname="Defer Until" narrative="Optionally, the date/time the new item(s) should be deferred until" expr="" />
+      <input type="number" name="Priority" friendlyname="Priority" narrative="Optionally, the priority for the new item(s). Lower numbers represent higher priorities. The default is 0." expr="" />
+      <input type="text" name="Tags" friendlyname="Tags" narrative="Optionally, a semi-colon-separated set of tags to apply to the queue item(s)" expr="" />
+      <input type="text" name="Status" friendlyname="Status" narrative="Optionally, the initial status required of the work queue item(s) " expr="" />
+      <input type="number" name="Batch Size" friendlyname="Batch Size" narrative="Optionally, the batch size to use when adding many items to the queue.  A Value of 0 will process all items in one batch.  An empty field will use the default batch size of 1000." expr="">
+        <validator type="BluePrism.AutomateProcessCore.RangeParameterValidation" parameter="0:25000" />
+      </input>
+    </inputs>
+    <outputs>
+      <output type="collection" name="Item IDs" friendlyname="Item IDs" narrative="The IDs of the items which have been added to the queue, in the order of the collection of data passed that was input" stage="Item IDs" />
+    </outputs>
+    <onsuccess>2d954113-18c3-4ed5-a3a0-0083d403ec52</onsuccess>
+    <resource object="Blueprism.Automate.clsWorkQueuesActions" action="Add To Queue" />
+  </stage>
+  <stage stageid="2d954113-18c3-4ed5-a3a0-0083d403ec52" name="Get Next Item" type="Action">
+    <narrative>This action gets the next item to be worked from the queue, returning its details and locking it so no other case can work it.
+
+Items with higher priorities (lower numerical value) are processed first. Where the priority is the same, the next item is the one that has been in the queue the longest,  is not already locked, and is not already completed.
+
+The Item ID returned is used to make further calls to update the work status for that item. It may be empty, in which case there are no items available. This can mean either a) the queue is empty, or b) the queue is not running. This mechanism can be used to cleanly stop all processes working a particular queue at the end of the next case. Items that have a 'deferred' time set will not be returned unless that time has been reached.</narrative>
+    <display x="-555" y="-1245" />
+    <inputs>
+      <input type="text" name="Queue Name" friendlyname="Queue Name" narrative="The name of the queue" expr="&quot;WQ1&quot;" />
+      <input type="text" name="Key Filter" friendlyname="Key Filter" narrative="Optionally, a key value to filter by. Only items with this key value will be considered." expr="" />
+      <input type="text" name="Tag Filter" friendlyname="Tag Filter" narrative="Optionally, a tag mask to filter by. This can consist of any number of tag searches - each term can be separated by a semi-colon and they are all applied to the search (ie. they are AND'ed terms not OR'ed terms). For example, &quot;Account: Joint; -Balance: Overdrawn; Card: *Visa*&quot; will include any items which match all the terms, ie. every item must have an 'Account: Joint' tag applied, no item can have a 'Balance: Overdrawn' tag applied, every item must have a tag applied which starts with 'Card: ' and then contains the text 'Visa'." expr="" />
+    </inputs>
+    <outputs>
+      <output type="text" name="Item ID" friendlyname="Item ID" narrative="The ID of the item retrieved - empty if there are none available." stage="Item IDs.Item ID" />
+      <output type="collection" name="Data" friendlyname="Data" narrative="The data associated with the item - a single collection row." stage="DataResult" />
+      <output type="text" name="Status" friendlyname="Status" narrative="The status of the item." stage="" />
+      <output type="number" name="Attempts" friendlyname="Attempts" narrative="The number of attempts already made to work this item." stage="" />
+    </outputs>
+    <onsuccess>bf6d0afe-6260-4b95-96c3-52b356cc1fbe</onsuccess>
+    <resource object="Blueprism.Automate.clsWorkQueuesActions" action="Get Next Item" />
+  </stage>
+  <stage stageid="bf6d0afe-6260-4b95-96c3-52b356cc1fbe" name="Item Present" type="Decision">
+    <display x="-480" y="-1245" />
+    <decision expression="[Item IDs.Item ID]&lt;&gt;&quot;&quot;" />
+    <ontrue>36617247-2daa-4c89-ac21-02c89e986eaf</ontrue>
+    <onfalse>fed90613-9768-4a94-ad18-d1cab230186a</onfalse>
+  </stage>
+  <stage stageid="36617247-2daa-4c89-ac21-02c89e986eaf" name="Set Data Value" type="Action">
+    <loginhibit onsuccess="true" />
+    <display x="-480" y="-1200" />
+    <inputs>
+      <input type="number" name="handle" friendlyname="handle" narrative="The integer handle identifying the instance on which the required cell value should be set. The default of zero indicates the currently active instance." expr="[handle]" />
+      <input type="text" name="Cell Reference" friendlyname="Cell Reference" narrative="The reference on the speficied sheet identifying the cell which should be set." expr="&quot;C8&quot;" />
+      <input type="text" name="Value" friendlyname="Value" narrative="The value to which the specified cell should be set." expr="[DataResult.Emp Code]" />
+    </inputs>
+    <onsuccess>8f161f97-4264-4665-bbce-82b8a689a244</onsuccess>
+    <resource object="MS Excel VBO" action="Set Cell Value" />
+  </stage>
+  <stage stageid="8f161f97-4264-4665-bbce-82b8a689a244" name="Create PDF" type="Action">
+    <loginhibit onsuccess="true" />
+    <display x="-480" y="-1155" />
+    <inputs>
+      <input type="number" name="Handle" friendlyname="Handle" narrative="The integer handle identifying the instance that contains the macro. The default of zero indicates the currently active instance." expr="[handle]" />
+      <input type="text" name="Macro Name" friendlyname="Macro Name" narrative="The name of the macro to run" expr="&quot;CreatePDF&quot;" />
+    </inputs>
+    <onsuccess>c4c2d680-4edd-4b51-8fbc-c5cb6f5f0b5a</onsuccess>
+    <resource object="MS Excel VBO" action="Run Macro" />
+  </stage>
+  <stage stageid="62d5db42-12e4-49d7-9ae1-3c80a58579f8" name="Mark Completed" type="Action">
+    <loginhibit onsuccess="true" />
+    <narrative>Marks the item as completed, by updating the Completed timestamp and setting Locked to null. The item must be 'owned' by the calling process - i.e. it must have been retrieved using Get Next Item.</narrative>
+    <display x="-555" y="-1200" />
+    <inputs>
+      <input type="text" name="Item ID" friendlyname="Item ID" narrative="The ID of the item to mark" expr="[Item IDs.Item ID]" />
+    </inputs>
+    <onsuccess>2d954113-18c3-4ed5-a3a0-0083d403ec52</onsuccess>
+    <resource object="Blueprism.Automate.clsWorkQueuesActions" action="Mark Completed" />
+  </stage>
+  <stage stageid="fed90613-9768-4a94-ad18-d1cab230186a" name="Close Workbook" type="Action">
+    <loginhibit onsuccess="true" />
+    <display x="-405" y="-1245" />
+    <inputs>
+      <input type="number" name="handle" friendlyname="handle" narrative="The integer handle identifying the instance on which the workbook which should be closed resides. The default of zero indicates the currently active instance." expr="[handle]" />
+      <input type="text" name="Workbook Name" friendlyname="Workbook Name" narrative="The name of the workbook which should be closed." expr="[Workbook Name]" />
+      <input type="flag" name="Save Data" friendlyname="Save Data" narrative="True to save the data before closing the workbook; The default of False will discard any changes before closing the workbook." expr="" />
+    </inputs>
+    <onsuccess>02869c46-775c-4da7-bb2e-c345f88d2f2f</onsuccess>
+    <resource object="MS Excel VBO" action="Close Workbook" />
+  </stage>
+  <stage stageid="c5944996-d272-4835-adae-6f965fc716e8" name="Item IDs" type="Collection">
+    <display x="0" y="-1410" />
+    <datatype>collection</datatype>
+    <private />
+    <alwaysinit />
+    <collectioninfo>
+      <field name="Item ID" type="text" description="The Item ID of the work queue item" displayname="Item IDs" />
+    </collectioninfo>
+  </stage>
+  <stage stageid="bf221172-1724-4e8d-98af-2a5fe8e9f98c" name="DataResult" type="Collection">
+    <display x="60" y="-1410" />
+    <datatype>collection</datatype>
+    <private />
+    <alwaysinit />
+  </stage>
+  <stage stageid="c4c2d680-4edd-4b51-8fbc-c5cb6f5f0b5a" name="Send Mail" type="Action">
+    <loginhibit onsuccess="true" />
+    <display x="-555" y="-1155" />
+    <inputs>
+      <input type="number" name="Handle" friendlyname="Handle" narrative="The integer handle identifying the instance that contains the macro. The default of zero indicates the currently active instance." expr="" />
+      <input type="text" name="Macro Name" friendlyname="Macro Name" narrative="The name of the macro to run" expr="&quot;SendMail&quot;" />
+    </inputs>
+    <onsuccess>62d5db42-12e4-49d7-9ae1-3c80a58579f8</onsuccess>
+    <resource object="MS Excel VBO" action="Run Macro" />
+  </stage>
+</process>
